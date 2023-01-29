@@ -50,3 +50,12 @@ export const reqShopCarMsg = (skuId, skuNum) => {
     return requests.post(`/cart/addToCart/${skuId}/${skuNum}`);
 }
 
+//7.获取购物车列表数据的接口
+// 地址：/api/cart/cartList  GET请求
+export const reqShopCartList = () => {
+    return requests({
+        url: '/cart/cartList',
+        method: 'get',
+    })
+}
+

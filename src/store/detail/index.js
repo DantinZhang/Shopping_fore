@@ -1,9 +1,11 @@
 //本文件用于存储Detail详情页的数据
 import { reqDetailData, reqShopCarMsg } from '@/api';
+import { getId } from '@/utils/getId';
 export const detail = {
     namespaced: true,
     state: {
-        detailData: {}
+        detailData: {},
+        userTempId: getId(), //这个放哪个仓库都一样，上来都会先初始化
     },
     actions: {
         //异步请求，拿到详情页数据

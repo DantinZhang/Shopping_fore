@@ -5,6 +5,8 @@ import axios from 'axios';
 import nprogress from 'nprogress';
 //引入进度条样式
 import 'nprogress/nprogress.css';
+//引入仓库，查看是否有游客id
+import store from '@/store'
 
 
 //1.利用axios对象的方法create，创建一个axios实例
@@ -17,7 +19,11 @@ const requests = axios.create({
 //2.请求拦截器：在发请求之前，请求拦截器可以检测到，可以在请求发出去之前做一些事情
 requests.interceptors.request.use((config) => {
     //config:配置对象，对象里面有一个属性很重要，headers请求头
-    console.log('请求拦截器成功的回调', config);
+    // console.log('请求拦截器成功的回调', config);
+    //添加请求头，携带临时游客id
+    // console.log('仓库长这样：',store);
+    //这个请求头的名字是和后端约定好的，后端约定这个字段就代表临时游客
+    config.headers.userTempId = store.state.detail.userTempId;
     nprogress.start(); //进度条开始
     return config;  //检查完再把东西还给人家
 });
@@ -25,13 +31,13 @@ requests.interceptors.request.use((config) => {
 //3.响应拦截器
 requests.interceptors.response.use(
     (res) => {
-        console.log('响应拦截器成功的回调执行了，响应对象是：', res);
+        // console.log('响应拦截器成功的回调执行了，响应对象是：', res);
         //成功的回调函数，服务器响应数据回来以后，响应拦截器可以检测到，可以做一些事情
         nprogress.done(); //进度条结束
         return res.data;//检查完把东西还给人家，并加工一下，直接把.data给Promise结果值
     },
     (error) => {
-        console.log('响应拦截器失败的回调执行了');
+        // console.log('响应拦截器失败的回调执行了');
         alert(error);
         //响应失败的回调函数，返回值和then的规则一样
         //若返回非Promise则走成功的回调，返回Promise则根据状态决定
