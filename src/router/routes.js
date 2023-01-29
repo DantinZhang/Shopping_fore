@@ -7,8 +7,17 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess';
+import shopCart from '@/pages/ShopCart';
 //路由规则
 export default [
+    {
+        name: 'gouwuche',
+        path: '/shopcart',
+        component: shopCart,
+        meta: {
+            showFooter: true
+        }
+    },
     {
         name: 'zhuye',
         path: '/home',

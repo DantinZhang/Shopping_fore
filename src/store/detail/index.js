@@ -16,17 +16,18 @@ export const detail = {
         //加入购物车
         //异步请求，把商品id和数量发送给服务器，参数解构赋值并自己起名
         async sendShopCarMsg(context, { skuId: id, skuNum: num }) {
-            let result = await reqShopCarMsg(id, num);
-            //这里只是把购物车数据给服务器，但是服务器不需要返回什么东西
-            //所以这里我们不用再三连环了，通过dispatch把数据给服务器就已经欧了
-            console.log(result.code);
-            if (result.code === 200) {
-                //返回的是成功的标记
-                return 'ok';
-            } else {
-                //返回的是失败的标记
-                return Promise.reject(new Error('faile'));
-            }
+            //其实这里不用try-catch,因为那边已经try了,不写return默认返回undefined(成功的Primise)
+            // try {
+                //如果成功则返回undefined(返回成功的Promise)，如果失败则抛出异常（返回失败的Promise）
+                let result = await reqShopCarMsg(id, num);
+                //这里只是把购物车数据给服务器，但是服务器不需要返回什么东西
+                //所以这里我们不用再三连环了，通过dispatch把数据给服务器就已经欧了
+                console.log('zzy',result);
+                // return 'ok'; //返回非Promise，结果是成功的Promise
+            // }
+            // catch(err) {
+                // return Promise.reject('失败'); //返回失败的Promise
+            // }
         }
     },
     mutations: {

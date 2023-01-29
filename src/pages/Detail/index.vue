@@ -378,8 +378,9 @@ export default {
       //1.发请求，把购物车的商品id和数量传给数据库
       try {
         //2.请求成功，服务器已经存储了数据了，那么就要路由跳转并传参
-        await this.$store.dispatch('detail/sendShopCarMsg', { skuId: this.$route.params.skuId, skuNum: this.shopCarNum })
-        //路由跳转并传参
+        let result = await this.$store.dispatch('detail/sendShopCarMsg', { skuId: this.$route.params.skuId, skuNum: this.shopCarNum })
+        console.log(result); //undefined
+        //请求成功了，那么就路由跳转并传参
         this.$router.push({
           name: 'jiaruchenggong',
           query: { shopCarNum: this.shopCarNum }  //这里只带购物数量，skuInfo用会话存储
