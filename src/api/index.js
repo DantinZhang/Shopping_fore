@@ -33,6 +33,9 @@ export const reqSearchInfo = function (params) {
     })
 }
 
+//后面这些接口全部都是传的params参数，而axios的params参数只能拼接在url中
+//如果要传query参数，那么配置项的名字叫params，但是传的时query参数噢
+
 //5.Detail模块的接口
 //地址：/api/item/{ skuId }  get  参数skuId商品Id，必选,这里地址意思是解构赋值，不是对象
 export const reqDetailData = function (skuId) {
@@ -63,4 +66,13 @@ export const reqShopCartList = () => {
 //地址：/api/cart/checkCart/{skuID}/{isChecked}  GET
 export const changeIsChecked = (skuId, isChecked) => {
     return requests.get(`/cart/checkCart/${skuId}/${isChecked}`)
+}
+
+//9.删除购物车商品的接口
+// /api/cart/deleteCart/{skuId}
+export const reqDeleteGoodById = (skuId) => {
+    return requests({
+        url: `/cart/deleteCart/${skuId}`,
+        method: 'delete',
+    })
 }

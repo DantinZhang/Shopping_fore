@@ -33,7 +33,7 @@
             <span class="sum">{{good.skuPrice * good.skuNum}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="javascript:;" class="sindelet" @click="deleteOneGood(good.skuId)">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -77,9 +77,12 @@ import { mapState } from 'vuex';
       this.getData();
     },
     methods: {
+      //1.函数1：请求购物车数据
       getData() {
         this.$store.dispatch('shopcart/getShopCartList');
       },
+
+      //2.函数2：修改某个商品勾选状态
       async changeState(goodId, goodState) {
         try {
           //点击某个商品勾选框时，就发请求修改它的勾选状态
@@ -92,6 +95,8 @@ import { mapState } from 'vuex';
           alert('修改失败！',err);
         }
       },
+
+      //3.函数3：全选按钮控制所有勾选框
       async selectAllOrNot() {
         let stateFlag = this.isAllChecked ? 0 : 1;
         try {
@@ -101,8 +106,19 @@ import { mapState } from 'vuex';
         } catch(err) {
           console.log('出现错误',err);
         }
-        
       },
+
+      //4.删除某个购物车商品
+      deleteOneGood(skuId) {
+        //try-catch捕获一下，如果删除失败，那么就会抛出错误，返回错误的Promise
+        //如果删除成功，那么没写返回值返回undefined，默认是成功的Promise
+        try {
+          this.$store.dispatch('shopcart/deleteOneGood',skuId);
+          this.getData();
+        } catch(err) {
+          console.log('删除失败',err)
+        }
+      }
     },
     computed: {
       ...mapState('shopcart',['cartList']),
