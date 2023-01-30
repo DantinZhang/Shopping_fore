@@ -49,7 +49,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="javascript:;" @click="deleteAllSelected">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -118,10 +118,22 @@ import { mapState } from 'vuex';
         } catch(err) {
           console.log('删除失败',err)
         }
+      },
+
+      //5.删除选中的所有商品
+      async deleteAllSelected() {
+        //Promise.all返回一个Promise，只有全部成功了才是成功
+        try{
+          await this.$store.dispatch('shopcart/deleteAllGoods');
+          this.getData();
+        }catch(err) {
+          console.log('删除过程出现了问题',err.message);
+        }
       }
     },
     computed: {
       ...mapState('shopcart',['cartList']),
+      //计算总价
       totalPrice() {
         let totalPrice = 0;
         this.cartList.forEach( el => {
@@ -131,6 +143,7 @@ import { mapState } from 'vuex';
         });
         return totalPrice;
       },
+      //是否全部选中的标志
       isAllChecked() {
         //全选按钮是否选中，取决于每个是否都选中
         return this.cartList.every(el => {

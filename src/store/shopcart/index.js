@@ -24,12 +24,8 @@ const actions = {
   changeAllStates({dispatch, state}, isChecked) {
     let promiseArr = [];
     state.cartList.forEach( el => {
-      try {
         let promise = dispatch('changeChecked', {skuId: el.skuId, state: isChecked});
         promiseArr.push(promise);
-      } catch(err) {
-        console.log(`${el.skuNam}修改失败`,err);
-      }
     });
     return Promise.all(promiseArr);
   },
@@ -42,6 +38,20 @@ const actions = {
     }catch(err) {
       console.log('错误！！嗷嗷嗷',err)
     }
+  },
+
+  //5.删除选中的所有商品
+  deleteAllGoods({dispatch,state}) {
+    //利用Promise.all来给组件反馈成功或失败
+    let promiseArr = [];
+    state.cartList.forEach(el => {
+      if(el.isChecked == 0) return;
+      if(el.isChecked == 1) { 
+        let promise = dispatch('deleteOneGood', el.skuId);
+        promiseArr.push(promise);
+      }
+    })
+    return Promise.all(promiseArr);
   }
 };
 
