@@ -13,7 +13,9 @@
       <div class="cart-body">
         <ul v-for="good in cartList" :key="good.id" class="cart-list">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="good.isChecked == 1">
+            <input type="checkbox" name="chk_list" 
+            @change="changeState(good.skuId, good.isChecked)" 
+            :checked="good.isChecked == 1">
           </li>
           <li class="cart-list-con2">
             <img :src="good.imgUrl">
@@ -40,7 +42,10 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input class="chooseAll" type="checkbox" 
+        :checked="isAllChecked && cartList.length>0"
+        @click="selectAllOrNot"
+        >
         <span>全选</span>
       </div>
       <div class="option">
@@ -68,21 +73,54 @@ import { mapState } from 'vuex';
 
   export default {
     name: 'ShopCart',
-    data() {
-      return {
-        totalP: 0,
-      }
-    },
     mounted() {
       this.getData();
     },
     methods: {
       getData() {
         this.$store.dispatch('shopcart/getShopCartList');
-      }
+      },
+      async changeState(goodId, goodState) {
+        try {
+          //点击某个商品勾选框时，就发请求修改它的勾选状态
+          let stateFlag = goodState == 1 ? 0 : 1; 
+          await this.$store.dispatch('shopcart/changeChecked', {skuId: goodId, state: stateFlag});
+          this.getData();
+        }
+        catch(err) {
+          //如果修改失败，那么就提示
+          alert('修改失败！',err);
+        }
+      },
+      async selectAllOrNot() {
+        let stateFlag = this.isAllChecked ? 0 : 1;
+        try {
+          let result = await this.$store.dispatch('shopcart/changeAllStates',stateFlag);
+          console.log(result);//全是undefined，说明那个请求只写了resolve()，没传值
+          this.getData();
+        } catch(err) {
+          console.log('出现错误',err);
+        }
+        
+      },
     },
     computed: {
       ...mapState('shopcart',['cartList']),
+      totalPrice() {
+        let totalPrice = 0;
+        this.cartList.forEach( el => {
+          if(el.isChecked == 1) {
+            totalPrice += el.skuNum * el.skuPrice;
+          }
+        });
+        return totalPrice;
+      },
+      isAllChecked() {
+        //全选按钮是否选中，取决于每个是否都选中
+        return this.cartList.every(el => {
+          return el.isChecked == 1;
+        })
+      },
     },
   }
 </script>

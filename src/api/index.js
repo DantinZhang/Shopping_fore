@@ -59,3 +59,8 @@ export const reqShopCartList = () => {
     })
 }
 
+//8.修改产品勾选状态的接口,其实就是拿着id去改isChecked字段
+//地址：/api/cart/checkCart/{skuID}/{isChecked}  GET
+export const changeIsChecked = (skuId, isChecked) => {
+    return requests.get(`/cart/checkCart/${skuId}/${isChecked}`)
+}
