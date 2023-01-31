@@ -25,10 +25,23 @@
             <span class="price">{{ good.skuPrice }}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" :value="good.skuNum" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
+            <!-- ---------------------------------------------------------------- -->
+            <!-- 1.减号 -->
+            <a href="javascript:void(0)" class="mins" 
+            @click="changeSkuNum('sub', good, -1)">-</a>
+            <!-- 2.输入任意值 -->
+            <input autocomplete="off" 
+            type="text" 
+            :value="good.skuNum" 
+            minnum="1" 
+            class="itxt"
+            @blur="changeSkuNum('custom', good, $event.target.value)"
+            >
+            <!-- 3.加号 -->
+            <a href="javascript:void(0)" class="plus" 
+            @click="changeSkuNum('add', good, 1)">+</a>
           </li>
+          <!-- ------------------------------------------------------------------- -->
           <li class="cart-list-con6">
             <span class="sum">{{good.skuPrice * good.skuNum}}</span>
           </li>
@@ -70,6 +83,8 @@
 
 <script>
 import { mapState } from 'vuex';
+//引入节流
+import throttle from 'lodash/throttle';
 
   export default {
     name: 'ShopCart',
@@ -129,7 +144,46 @@ import { mapState } from 'vuex';
         }catch(err) {
           console.log('删除过程出现了问题',err.message);
         }
-      }
+      },
+
+      //6.修改商品的数量
+      changeSkuNum: throttle(async function(type, good, disnum) {
+        console.log(type, good, disnum);
+        switch(type) {
+          //如果是减号，那么不能减到0
+          case 'sub':
+            //有个bug，如果连续点减号，那么可能会变成负数
+            //这是因为连续快速点击，请求还来不及发送，数据没改，所以每次disnum都是-1
+            //解决办法就是节流，给服务器一些缓冲的时间，防止数据不同步出现上述bug
+            if(good.skuNum > 1) {
+              disnum = -1;
+            }else {
+              disnum = 0;
+            }
+            break;
+          case 'add':
+            disnum = 1;
+            break;
+          case 'custom':
+            let checkNum = disnum * 1  //任何非数值字符串乘以数值都是NaN
+            if(isNaN(checkNum) || disnum < 1) {
+              disnum = 0;
+            }else {
+              //避免用户输入小数点，所以转化为整形
+              disnum = parseInt(disnum) - good.skuNum; //需要传的是它们的差值（接口规定）
+            }
+            break;
+        }
+        //发请求，修改购物车商品的数量。
+        try {
+          await this.$store.dispatch('detail/sendShopCarMsg',{skuId: good.skuId, skuNum: disnum})
+          //如果成功，就再次请求数据刷新页面
+          this.getData();
+        }
+        catch(err) {
+          alert('修改数量出现了错误！',err);
+        }
+      },800)
     },
     computed: {
       ...mapState('shopcart',['cartList']),
