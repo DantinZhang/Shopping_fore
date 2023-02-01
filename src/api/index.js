@@ -76,3 +76,4 @@ export const reqDeleteGoodById = (skuId) => {
         method: 'delete',
     })
 }
+
