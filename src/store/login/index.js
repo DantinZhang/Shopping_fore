@@ -16,11 +16,18 @@ const actions = {
     },
     //2.注册用户
     async sendRegisterUser(context,{ phone, password, code}) {
+        console.log(context);
         try {
             let result = await reqRegisterUser(phone, password, code);
             console.log(result);
+            if(result.code == 200) {
+                return '注册成功';
+            }
+            if(result.code == 223) {
+                return '该用户已注册！'
+            }
         }catch(err) {
-            alert(err.message);
+            alert('请求失败',err.message);
         }   
     }
 };

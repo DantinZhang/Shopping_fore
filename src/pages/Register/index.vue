@@ -73,11 +73,17 @@
         //来个逻辑短路
         this.phone && this.$store.dispatch('login/getRegisterCode', this.phone);
       },
-      completeRegister() {
-        //来个逻辑短路
-        const {phone, password, passwordConfirm, agree, registerCode} = this;
-        (phone&&registerCode&&password&&passwordConfirm&&password==passwordConfirm&&agree==true)
-        &&this.$store.dispatch('login/sendRegisterUser', {phone, code:registerCode, password})
+      async completeRegister() {
+        try {
+          //来个逻辑短路
+          const {phone, password, passwordConfirm, agree, registerCode} = this;
+          if(phone&&registerCode&&password&&passwordConfirm&&password==passwordConfirm&&agree==true) {
+            let result = await this.$store.dispatch('login/sendRegisterUser', {phone, code:registerCode, password})
+            alert(result);
+          }
+        }catch(err) {
+          alert('注册失败！',err)
+        }
       },
     },
     computed: {
