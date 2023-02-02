@@ -83,3 +83,17 @@ export const reqDeleteGoodById = (skuId) => {
 export const reqRegisterCode = function(phone) {
     return requests.get(`/user/passport/sendCode/${phone}`);
 }
+
+//11.注册用户的接口
+// /api/user/passport/register
+export const reqRegisterUser = (phone, password, code) => {
+    return requests({
+        method: 'post',
+        url: '/user/passport/register',
+        data: {
+            phone,
+            password,
+            code
+        }
+    })
+}

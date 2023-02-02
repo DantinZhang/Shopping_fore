@@ -19,21 +19,21 @@
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
+        <input type="password" placeholder="请输入你的登录密码" v-model="password">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
+        <input type="password" placeholder="请输入确认密码" v-model="passwordConfirm">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox">
+        <input name="m1" type="checkbox" :checked="agree" @click="agree = !agree">
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="completeRegister">完成注册</button>
       </div>
     </div>
 
@@ -62,14 +62,23 @@
     name: 'Register',
     data() {
       return {
-        phone: '',
+        phone: '', //手机号
+        password: '', //密码
+        passwordConfirm: '', //确认密码
+        agree: false, //是否同意
       }
     },
     methods: {
       getRegisterCode() {
         //来个逻辑短路
         this.phone && this.$store.dispatch('login/getRegisterCode', this.phone);
-      }
+      },
+      completeRegister() {
+        //来个逻辑短路
+        const {phone, password, passwordConfirm, agree, registerCode} = this;
+        (phone&&registerCode&&password&&passwordConfirm&&password==passwordConfirm&&agree==true)
+        &&this.$store.dispatch('login/sendRegisterUser', {phone, code:registerCode, password})
+      },
     },
     computed: {
       ...mapState('login',['registerCode'])
