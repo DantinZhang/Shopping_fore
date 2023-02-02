@@ -77,3 +77,9 @@ export const reqDeleteGoodById = (skuId) => {
     })
 }
 
+
+//10.获取验证码的接口
+// /api/user/passport/sendCode/{phone}
+export const reqRegisterCode = function(phone) {
+    return requests.get(`/user/passport/sendCode/${phone}`);
+}
