@@ -12,7 +12,7 @@
                     </p>
                     <p v-show="userName">
                         <span>{{ userName }}</span>
-                        <router-link to="/login" class="register">退出登录</router-link>
+                        <router-link to="/login" class="register" @click.native="logout">退出登录</router-link>
                     </p>
                 </div>
                 <div class="typeList">
@@ -73,6 +73,11 @@ export default {
                 // query: { k: this.keyword.toUpperCase() },
                 query: this.$route.query
             })
+        },
+        //退出登录，删除用户数据，删除token，跳回登录页
+        logout() {
+            this.$store.state.login.userInfo = {}; //删除仓库数据，不知道直接这样好不好
+            localStorage.removeItem('token');  //删除token
         }
     },
     computed: {
