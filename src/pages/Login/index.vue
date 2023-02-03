@@ -75,10 +75,11 @@
       }
     },
     methods: {
-      userLogin() {
+      async userLogin() {
         try {
           let {phone,password} = this;
-          (phone&&password)&&this.$store.dispatch('login/userLogin',{phone, password});
+          (phone&&password)&&await this.$store.dispatch('login/userLogin',{phone, password});
+          //上边这步tm别忘了写异步，这个bug找了半天
           this.$router.push('/home');
         }catch(err) {
           alert('登录请求失败！',err.message);

@@ -107,3 +107,9 @@ export const reqUser = (phone, password) => {
         data: {phone,password}
     })
 }
+
+//13.请求用户数据的接口
+// /api/user/passport/auth/getUserInfo
+export const reqUserInfo = () => {
+    return requests.get('/user/passport/auth/getUserInfo');
+}
