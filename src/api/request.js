@@ -21,6 +21,7 @@ requests.interceptors.request.use((config) => {
     //config:配置对象，对象里面有一个属性很重要，headers请求头
     // console.log('请求拦截器成功的回调', config);
     //添加请求头，携带临时游客id
+    config.headers.token = localStorage.getItem('token');
     // console.log('仓库长这样：',store);
     //这个请求头的名字是和后端约定好的，后端约定这个字段就代表临时游客
     config.headers.userTempId = store.state.detail.userTempId;

@@ -97,3 +97,13 @@ export const reqRegisterUser = (phone, password, code) => {
         }
     })
 }
+
+//12.登录接口
+// /api/user/passport/login
+export const reqUser = (phone, password) => {
+    return requests({
+        url: 'user/passport/login',
+        method: 'post',
+        data: {phone,password}
+    })
+}

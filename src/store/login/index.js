@@ -1,5 +1,5 @@
 //本文件是注册登录部分的仓库
-import {reqRegisterCode, reqRegisterUser} from '@/api';
+import {reqRegisterCode, reqRegisterUser, reqUser} from '@/api';
 
 const state = {
     registerCode: '',
@@ -29,6 +29,14 @@ const actions = {
         }catch(err) {
             alert('请求失败',err.message);
         }   
+    },
+
+    //2.登录
+    async userLogin(context, {phone,password}) {
+        let result = await reqUser(phone, password);
+        if(result.code == 200) {
+            localStorage.setItem('token',result.data.token);
+        }
     }
 };
 const mutations = {

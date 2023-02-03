@@ -80,6 +80,11 @@
           if(phone&&registerCode&&password&&passwordConfirm&&password==passwordConfirm&&agree==true) {
             let result = await this.$store.dispatch('login/sendRegisterUser', {phone, code:registerCode, password})
             alert(result);
+            if(result == '注册成功') {
+              this.$router.push({
+                name: 'denglu'
+              })
+            }
           }
         }catch(err) {
           alert('注册失败！',err)
