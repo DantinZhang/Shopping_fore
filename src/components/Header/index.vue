@@ -78,6 +78,7 @@ export default {
         logout() {
             this.$store.state.login.userInfo = {}; //删除仓库数据，不知道直接这样好不好
             localStorage.removeItem('token');  //删除token
+            this.$router.push('/login'); //路由跳转回登录页
         }
     },
     computed: {
