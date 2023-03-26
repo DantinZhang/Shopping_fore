@@ -54,6 +54,7 @@ export default {
         }
     },
     mounted() {
+        console.log('子组件挂载')
         //绑定一个全局事件，当我们删掉关键字面包屑时，输入框的文字也同时清空
         this.$bus.$on('deleteKeyword', () => this.keyword = "");
     },
