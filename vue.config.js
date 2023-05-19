@@ -10,7 +10,7 @@ module.exports = defineConfig({
       "/api": {
         target: "http://gmall-h5-api.atguigu.cn",
         //由于本项目请求地址都带了api,这里就不用去掉了
-        // pathRewrite: { '^/api': '' }, 
+        // pathRewrite: { '^/api': '' },
       }
     }
   }
